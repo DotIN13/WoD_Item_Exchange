@@ -4,8 +4,8 @@
 // @version      0.1
 // @description  Exchange items among heroes in one view!
 // @author       DotIN13
-// @include      http://*.world-of-dungeons.org/wod/spiel/hero/items.php?*
-// @include      http://*.wannaexpresso.com/wod/spiel/hero/items.php?*
+// @include      http*://*.world-of-dungeons.org/wod/spiel/hero/items.php?*
+// @include      http*://*.wannaexpresso.com/wod/spiel/hero/items.php?*
 // @grant        none
 // ==/UserScript==
 
