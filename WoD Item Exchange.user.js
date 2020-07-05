@@ -14,8 +14,10 @@
 
     var queryData;
     var queryURL;
-    if ($('input[name="view"]').val() == "cellar" || $('input[name="view"]').val() == "") {
-        window.addEventListener("load", function() {
+
+    window.addEventListener("load", function() {
+
+        if ($('input[name="view"]').val() == "cellar" || $('input[name="view"]').val() == "") {
             $("input[name='ok']").parent().append("<a class='move_item button' href='#'>移动物品</a>", "<div class='move_progress'></div>");
             getSelect();
             $(".move_item").click(function() {
@@ -31,8 +33,9 @@
                     {
                         var target = $(this).val();
                         var params = $(this).parent().siblings().find('a').attr('href').match(/item_instance_id=(\d+)&type=\d&name=([^&]*)/);
-                        var data = queryData.replace(/&id=\d+/, "&id=" + params[1]).replace(/&name=[^&]*/, "&name=" + params[2]).replace(/&send_to=[^&]*/, "&send_to=" + target) + "&send_to_exec=√";
+                        var data = queryData.replace(/&id=\d+/g, "&id=" + params[1]).replace(/&name=[^&]*/, "&name=" + params[2]).replace(/&send_to=[^&]*/, "&send_to=" + target) + "&send_to_exec=√";
                         $(this).parent().parent().remove();
+                        console.log(queryURL, data);
                         $.ajax({
                             type: "POST",
                             url: queryURL,
@@ -48,8 +51,9 @@
                     }
                 })
             })
-        });
-    }
+        }
+    });
+
 
     function getSelect() {
         $(".move_progress").html("正在获取物品移动下拉菜单...");
