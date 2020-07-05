@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WoD Item Exchange
 // @namespace    https://www.wannaexpresso.com
-// @version      0.1
+// @version      0.2
 // @description  Exchange items among heroes in one view!
 // @author       DotIN13
 // @include      http*://*.world-of-dungeons.org/wod/spiel/hero/items.php?*
@@ -54,7 +54,7 @@
     function getSelect() {
         $(".move_progress").html("正在获取物品移动下拉菜单...");
         var firstItemURL = null;
-        $(".layout_clear .content_table a").each(function(index) {
+        $(".layout_clear .content_table a[href*='item_instance_id']").each(function() {
             firstItemURL = $(this).attr("href");
             if (!$(this).html().match("!")) {
                 return false;
@@ -66,11 +66,11 @@
                 url: firstItemURL,
             }).done(function(html){
                 $('.layout_clear .content_table thead tr.header').add($('.layout_clear .content_table tfoot tr.header')).append("<th>移动物品</th>")
-                $(".layout_clear .content_table a").each(function() {
+                $(".layout_clear .content_table a[href*='item_instance_id']").each(function(index) {
                     if ($(this).html().match("!")) {
-                        $(this).parent().parent().append("<td><select class='send_target'> <option value='none'>不移动</option>" + $('select[name="send_to"] optgroup', html).last().prop("outerHTML") + "</select></td>");
+                        $(this).parent().parent().append("<td><select class='send_target'><option value='none'>不移动</option>" + $('select[name="send_to"] optgroup', html).last().prop("outerHTML") + "</select></td>");
                     } else {
-                        $(this).parent().parent().append("<td><select class='send_target'> <option value='none'>不移动</option>" + $('select[name="send_to"] optgroup', html).first().prop("outerHTML") + $('select[name="send_to"] optgroup', html).last().prop("outerHTML") + "</select></td>");
+                        $(this).parent().parent().append("<td><select class='send_target'><option value='none'>不移动</option>" + $('select[name="send_to"] optgroup', html).first().prop("outerHTML") + $('select[name="send_to"] optgroup', html).last().prop("outerHTML") + "</select></td>");
                     }
                 })
                 queryData = $('form', html).serialize();
