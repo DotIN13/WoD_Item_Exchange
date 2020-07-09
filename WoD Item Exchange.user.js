@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WoD Item Exchange
 // @namespace    https://www.wannaexpresso.com
-// @version      0.2
+// @version      0.3
 // @description  Exchange items among heroes in one view!
 // @author       DotIN13
 // @include      http*://*.world-of-dungeons.org/wod/spiel/hero/items.php?*
@@ -24,11 +24,11 @@
                 $(".move_progress").html("开始移动物品。");
                 var progress = 0;
                 var task = 0;
-                $(".send_target").each(function() {
+                $(".send-target").each(function() {
                     if ($(this).val() != 'none')
                         task++;
                 })
-                $(".send_target").each(function() {
+                $(".send-target").each(function() {
                     if ($(this).val() != 'none')
                     {
                         var target = $(this).val();
@@ -69,16 +69,24 @@
                 type: "GET",
                 url: firstItemURL,
             }).done(function(html){
-                $('.layout_clear .content_table thead tr.header').add($('.layout_clear .content_table tfoot tr.header')).append("<th>移动物品</th>")
+                var fullSelect = "<select class='send-target'><option value='none'>不移动</option>" + $('select[name="send_to"] optgroup', html).first().prop("outerHTML") + $('select[name="send_to"] optgroup', html).last().prop("outerHTML") + "</select>";
+                var groupSelect = "<select class='send-target'><option value='none'>不移动</option>" + $('select[name="send_to"] optgroup', html).last().prop("outerHTML") + "</select>";
+                $('.layout_clear .content_table thead tr.header').add($('.layout_clear .content_table tfoot tr.header')).append("<th>移动物品<input type='checkbox' class='send-all'>" + fullSelect.replace("send-target", "send-template") + "</th>");
                 $(".layout_clear .content_table a[href*='item_instance_id']").each(function(index) {
                     if ($(this).html().match("!")) {
-                        $(this).parent().parent().append("<td><select class='send_target'><option value='none'>不移动</option>" + $('select[name="send_to"] optgroup', html).last().prop("outerHTML") + "</select></td>");
+                        $(this).parent().parent().append("<td>" + groupSelect + "<input type='checkbox' class='check-to-move'></td>");
                     } else {
-                        $(this).parent().parent().append("<td><select class='send_target'><option value='none'>不移动</option>" + $('select[name="send_to"] optgroup', html).first().prop("outerHTML") + $('select[name="send_to"] optgroup', html).last().prop("outerHTML") + "</select></td>");
+                        $(this).parent().parent().append("<td>" + fullSelect + "<input type='checkbox' class='check-to-move'></td>");
                     }
                 })
                 queryData = $('form', html).serialize();
                 queryURL = $('form', html).attr("action");
+                $(".send-template").change(function() {
+                    $('input.check-to-move:checked').prev().val($(this).val());
+                })
+                $(".send-all").change(function() {
+                    $('input.check-to-move').prop("checked", $(this).prop("checked"));
+                })
                 $(".move_progress").html("");
             })
         } else {
